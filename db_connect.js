@@ -2,7 +2,7 @@
 const mysql = require('mysql');
 require('dotenv').config();
 
-const db = mysql.creationConnection({
+const db = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
@@ -13,15 +13,10 @@ const db = mysql.creationConnection({
   
   db.connect(function(error) {
     if (error) {
-        return console.error('error');
+        return console.log({error: 'opps'});
     }
     console.log("Connecté à la base de données MySQL!");
-    db.query('SELECT * FROM users.utilisateurs', function (error, result){
-        if(error) throw error;
-            console.log(result);
-        
-    })
-   
+    
   });
 
  
