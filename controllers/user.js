@@ -1,15 +1,16 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const MaskData = require('maskdata');
+const db = require('../db_connect');
 
 require('dotenv').config();
 
-const User = require('../models/user');
+//const User = require('../models/user');
 
 //middleware creation nouvel User
 
 exports.signup = (req, res, next) =>{
-     
+
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
       
@@ -29,14 +30,16 @@ exports.signup = (req, res, next) =>{
             //récupération du mdp hashé de bcrypt
             password: hash
            
-        });  console.log(user)
-        //enregistrement de User dans BDD
-        user.save()
-        .then(() => res.status(200).json({message: 'Utilisateur crée !'}))
-        .catch(error => {
-            console.log(error)
-            res.status(500).json({error})
-        } );
+        },
+            db.query(' INSERT INTO utilisateur SET ?', users, function(error, results, rows){
+                if(error){
+                    res.status(400).json({error :'error'});
+                }else{
+                    res.status(200).json({message : "Utilisateur crée !"});
+                }
+            })
+        ); 
+       
     })
     .catch(error => res.status(500).json({error}));
 };
