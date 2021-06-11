@@ -4,7 +4,7 @@ const MaskData = require('maskdata');
 
 require('dotenv').config();
 
-const User = require('../models/user');
+const User = require('../models/users');
 
 //middleware creation nouvel User
 
@@ -18,25 +18,27 @@ exports.signup = (req, res, next) =>{
             unmaskedStartCharactersBeforeAt: 0,
             unmaskedEndCharactersAfterAt: 0,
             maskAtTheRate: false
-        }
+        } 
        
         const maskedEmail = MaskData.maskEmail2(req.body.email,emailMask2Options);
 
-        const user = new User({
+        const user = new User( {
 
-            //on passe email trouvé dans le corps de la requête
             email:maskedEmail,
-            //récupération du mdp hashé de bcrypt
+            firstname: req.body.firstname,
+            surname: req.body.surname,
             password: hash
-           
-        });  console.log(user)
-        //enregistrement de User dans BDD
-        user.save()
-        .then(() => res.status(200).json({message: 'Utilisateur crée !'}))
-        .catch(error => {
-            console.log(error)
-            res.status(500).json({error})
-        } );
+          
+        },
+            db.query(' INSERT INTO users SET ?', users, function(error, results, rows){
+                if(error){
+                    res.status(400).json({error :'error'});
+                }else{
+                    res.status(201).json({message : "Utilisateur crée !"});
+                }
+            })
+        ); console.log(user)
+       
     })
     .catch(error => res.status(500).json({error}));
 };
