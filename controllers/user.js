@@ -2,19 +2,14 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const MaskData = require('maskdata');
 const db = require('../db_connect');
-
 require('dotenv').config();
 
-<<<<<<< HEAD
-const User = require('../models/users');
-=======
-//const User = require('../models/user');
->>>>>>> 3b9e24571105683f63efc9b793aca4202964d7cc
+const User = require('../models/user');
 
 //middleware creation nouvel User
 
 exports.signup = (req, res, next) =>{
-
+     
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
       
@@ -23,46 +18,46 @@ exports.signup = (req, res, next) =>{
             unmaskedStartCharactersBeforeAt: 0,
             unmaskedEndCharactersAfterAt: 0,
             maskAtTheRate: false
-        } 
+        }
        
         const maskedEmail = MaskData.maskEmail2(req.body.email,emailMask2Options);
 
-        const user = new User( {
+        const user = new User({
 
+            //on passe email trouvé dans le corps de la requête
             email:maskedEmail,
             firstname: req.body.firstname,
             surname: req.body.surname,
-            password: hash
-<<<<<<< HEAD
-          
-        },
-            db.query(' INSERT INTO users SET ?', users, function(error, results, rows){
+            password: hash,
+            isAdmin : req.body.isAdmin
+        });
+            db.query(`INSERT INTO users SET ?`, user,  function(error, results, fields){
                 if(error){
                     res.status(400).json({error :'error'});
-                }else{
-                    res.status(201).json({message : "Utilisateur crée !"});
                 }
-            })
-        ); console.log(user)
-=======
-           
-        },
-            db.query(' INSERT INTO utilisateur SET ?', users, function(error, results, rows){
+            db.query(`SELECT * FROM users WHERE email = ?`, [maskedEmail], function(error, results, fields) {
                 if(error){
-                    res.status(400).json({error :'error'});
-                }else{
-                    res.status(200).json({message : "Utilisateur crée !"});
+                    res.status(404).json({error});
                 }
-            })
-        ); 
->>>>>>> 3b9e24571105683f63efc9b793aca4202964d7cc
-       
+                    res.status(201).json({
+                        userId : results[0].id,
+                        isAdmin : results[0].isAdmin,
+                        token: jwt.sign(
+                            {userId: results[0].id,
+                            isAdmin : results[0].isAdmin},
+                            process.env.TOKEN_SECRET,
+                            {
+                            expiresIn: '24h'
+                        })
+                    });
+            });
+        });
     })
     .catch(error => res.status(500).json({error}));
 };
 
 exports.login = (req, res, next) => {
-
+ 
     const emailMask2Options = {
         maskWith: "*", 
         unmaskedStartCharactersBeforeAt: 0,
@@ -72,33 +67,28 @@ exports.login = (req, res, next) => {
     
     const maskedEmail = MaskData.maskEmail2(req.body.email,emailMask2Options);
 
-    User.findOne( {
-        email : maskedEmail
-      
-    })
-    .then(user => {
-        if(!user){
-           
-            return res.status(401).json(
-                {error: 'Utilisateur non trouvé !'}
-          );
+   db.query(`SELECT * FROM users WHERE email= ? `, [maskedEmail], function(error, results, fields) {
+        if (results.length === 0) {
+             return res.status(401).json({error: 'Utilisateur non trouvé !'});
         }
-        bcrypt.compare(req.body.password, user.password)
+  
+        bcrypt.compare(req.body.password, results[0].password)
         .then(valid => {
             if(!valid){
                 return res.status(404).json({error: 'Veuillez vérifier votre émail et/ou votre mot de passe !'});
             }
            res.status(200).json({
-                userId : user._id,
-                token: jwt.sign(
-                    {userId: user._id},
-                    process.env.TOKEN_SECRET,
-                    {
-                    expiresIn: '900s'
+            userId : results[0].id,
+            isAdmin : results[0].isAdmin,
+            token: jwt.sign(
+                {userId: results[0].id,
+                isAdmin : results[0].isAdmin},
+                process.env.TOKEN_SECRET,
+                {
+                expiresIn: '900s'
                 })
             });
         })
         .catch(error => res.status(500).json({error}));
-    })
-    .catch(error=> res.status(500).json({error}));
+    });
 };
