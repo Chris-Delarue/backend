@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3b9e24571105683f63efc9b793aca4202964d7cc
 const mysql = require('mysql');
 require('dotenv').config();
 

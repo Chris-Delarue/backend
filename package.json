@@ -17,6 +17,10 @@
     "helmet": "^4.6.0",
     "jsonwebtoken": "^8.5.1",
     "maskdata": "^1.1.4",
+<<<<<<< HEAD
+=======
+    "mysql": "^2.18.1",
+>>>>>>> 3b9e24571105683f63efc9b793aca4202964d7cc
     "nodemon": "^2.0.7",
     "password-validator": "^5.1.1",
     "path": "^0.12.7",
