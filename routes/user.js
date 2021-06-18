@@ -10,4 +10,3 @@ router.post('/login', userCtrl.login);
 router.delete('/users/:userId', userCtrl.deleteAccount);
 
 module.exports = router;
-
