@@ -4,15 +4,11 @@ const MaskData = require('maskdata');
 const db = require('../db_connect');
 require('dotenv').config();
 
-const User = require('../models/user');
 
-//middleware creation nouvel User
 
 exports.signup = (req, res, next) =>{
      
-    bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      
+    
      const emailMask2Options = {
             maskWith: "*", 
             unmaskedStartCharactersBeforeAt: 0,
@@ -22,52 +18,29 @@ exports.signup = (req, res, next) =>{
        
         const maskedEmail = MaskData.maskEmail2(req.body.email,emailMask2Options);
 
-        const user = new User({
+            db.query(`SELECT * FROM users WHERE email='${maskedEmail}' `,(error, results, rows) =>{
+                if(results.length > 0) {
+                    res.status(401).json({error :'Email non disponible'
+                });
+                }else{
+                bcrypt.hash(req.body.password, 10)
+                .then(hash => {
 
-            //on passe email trouvé dans le corps de la requête
-            email:maskedEmail,
-<<<<<<< Updated upstream
-            //récupération du mdp hashé de bcrypt
-            password: hash
-           
-        });  console.log(user)
-        //enregistrement de User dans BDD
-        user.save()
-        .then(() => res.status(200).json({message: 'Utilisateur crée !'}))
-        .catch(error => {
-            console.log(error)
-            res.status(500).json({error})
-        } );
-=======
-            firstname: req.body.firstname,
-            surname: req.body.surname,
-            password: hash,
-            isAdmin : req.body.isAdmin
-        });
-            db.query(`INSERT INTO users SET ?`, user,  function(error, results, fields){
+                db.query(`  INSERT INTO users VALUES (NULL, '${maskedEmail}', '${req.body.firstname}', '${req.body.surname}', '${hash}', 0)`, (error, results, fields)=> {
                 if(error){
-                    res.status(400).json({error :'error'});
+                    return res.status(404).json({error});
                 }
-            db.query(`SELECT * FROM users WHERE email = ?`, [maskedEmail], function(error, results, fields) {
-                if(error){
-                    res.status(404).json({error});
-                }
-                    res.status(201).json({
-                        userId : results[0].id,
-                        isAdmin : results[0].isAdmin,
-                        token: jwt.sign(
-                            {userId: results[0].id,
-                            isAdmin : results[0].isAdmin},
-                            process.env.TOKEN_SECRET,
-                            {
-                            expiresIn: '24h'
-                        })
+                    return res.status(201).json({
+                       message :'Bienvenue sur notre reseau!!'
                     });
-            });
-        });
->>>>>>> Stashed changes
-    })
-    .catch(error => res.status(500).json({error}));
+                } 
+            );
+        })
+        .catch(error => res.status(500).json({
+            error
+        }));
+    }
+    });
 };
 
 exports.login = (req, res, next) => {
@@ -81,28 +54,46 @@ exports.login = (req, res, next) => {
     
     const maskedEmail = MaskData.maskEmail2(req.body.email,emailMask2Options);
 
-   db.query(`SELECT * FROM users WHERE email= ? `, [maskedEmail], function(error, results, fields) {
-        if (results.length === 0) {
-             return res.status(401).json({error: 'Utilisateur non trouvé !'});
-        }
-  
+   db.query(`SELECT * FROM users WHERE email='${maskedEmail}'`,(error, results, rows) => {
+        if (results.length > 0) {
+    
+    
         bcrypt.compare(req.body.password, results[0].password)
         .then(valid => {
             if(!valid){
                 return res.status(404).json({error: 'Veuillez vérifier votre émail et/ou votre mot de passe !'});
-            }
-           res.status(200).json({
-            userId : results[0].id,
-            isAdmin : results[0].isAdmin,
-            token: jwt.sign(
-                {userId: results[0].id,
-                isAdmin : results[0].isAdmin},
+            }else {
+                res.status(200).json({
+                userId : results[0].userId,
+                firstname : results[0].firstname,
+                surname : results[0].surname,
+                isAdmin : results[0].isAdmin,
+                token: jwt.sign(
+                {userId: results[0].userId,
+                },
                 process.env.TOKEN_SECRET,
                 {
                 expiresIn: '900s'
                 })
             });
-        })
-        .catch(error => res.status(500).json({error}));
+        }
+        });
+        }else{
+                res.status(404).json({
+                message: 'Utilisateur non trouvé!!'
+                 });
+            }
+        }
+   );
+};
+
+exports.deleteAccount = (req, res, next) => {
+    db.query(`DELETE FROM users WHERE userId = ${req.params.userId}`, (error, result, field) => {
+        if(error) {
+            return res.status(400).json({
+                error
+            });
+        }
+        return res.status(200).json(result);
     });
 };
