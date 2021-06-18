@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 3b9e24571105683f63efc9b793aca4202964d7cc
 const mysql = require('mysql');
 require('dotenv').config();
 
@@ -16,11 +12,10 @@ const db = mysql.createConnection({
   
   db.connect(function(error) {
     if (error) {
-        return console.log({error: 'opps'});
+        return console.log({error: 'opps I am not here ! '});
     }
     console.log("Connecté à la base de données MySQL!");
     
   });
 
- 
   module.exports = db;
