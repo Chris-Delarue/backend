@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const MaskData = require('maskdata');
 const db = require('../db_connect');
+const mysql = require('../repository/user')
 require('dotenv').config();
 
 
@@ -67,7 +68,6 @@ exports.login = (req, res, next) => {
                 userId : results[0].userId,
                 firstname : results[0].firstname,
                 surname : results[0].surname,
-                isAdmin : results[0].isAdmin,
                 token: jwt.sign(
                 {userId: results[0].userId,
                 },
