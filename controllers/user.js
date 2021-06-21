@@ -14,7 +14,7 @@ exports.signup = (req, res, next) =>{
             unmaskedStartCharactersBeforeAt: 0,
             unmaskedEndCharactersAfterAt: 0,
             maskAtTheRate: false
-        }
+        };
        
         const maskedEmail = MaskData.maskEmail2(req.body.email,emailMask2Options);
 
