@@ -10,42 +10,43 @@ class UserRepository {
     }
 
     signup(mysqlInsert) {
-        let sql = 'INSERT INTO users VALUES(NULL, ?,?,?,?)'; 
+        let sql = `INSERT INTO users VALUES(NULL,?,?,?,?,NULL)`; 
         sql = mysql.format(sql, mysqlInsert);
-        console.log(sql)  
-
+      
         return new Promise((resolve, reject) => {
             db.query(sql, (error, result) =>{
-                if(error) reject({error : 'Email non disponible'});
-                resolve({ message: 'Bienvenue sur notre reseau!!'});
+                if(error) {
+                    reject({error : 'Email non disponible'});
+                }else{
+                    resolve({ message: 'Bienvenue sur notre reseau!!'});
+                }
             });
-        }) 
-     
+        });
     }
+    
     login(mysqlInsert, password) {
-        let sql = 'SELECT * FROM users WHERE email = ?';
+        let sql = `SELECT * FROM users WHERE email = ?`;
         sql = mysql.format(sql, mysqlInsert);
-
+        
         return new Promise((resolve, reject) => {
             db.query(sql, (error, result) => {
 
             if(error) reject({ error});
             
             if(!result[0]) {
-                reject ({ error: 'Opps nous vous avons pas trouvé!!'});
+                reject ({ error: 'Opps nous NE vous avons pas trouvé!!'});
             }else {
                 bcrypt.compare(password, result[0].password)
                 .then(valid => {
                     if(!valid) return reject({ error: 'Veuillez vérifier votre émail et/ou votre mot de passe !'});
                     resolve({
                         userId : result[0].userId,
-                        
                         token: jwt.sign(
                         {userId: results[0].userId,
                         },
                         process.env.TOKEN_SECRET,
                         {
-                        expiresIn: '900s'
+                        expiresIn: '24h'
                         })
                     });
                 })
@@ -54,6 +55,7 @@ class UserRepository {
             });
         });
     }
+    
     deleteAccount(mysqlInsert) {
         let mysql = '   DELETE FROM users WHERE id=?';
         sql = mysql.format(sql, mysqlInsert)
