@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mysql= require('mysql');
 const MaskData = require('maskdata');
 const db = require('../db_connect');
 const UserRepository = require('../repository/user');
@@ -40,7 +41,7 @@ exports.signup = (req, res, next) =>{
             error));
 };
 
-exports.login = (req, res, next) => {
+exports.login =  (req, res, next) => {
  
     const emailMask2Options = {
         maskWith: "*", 
@@ -56,23 +57,26 @@ exports.login = (req, res, next) => {
    let mysqlInsert = [email];
    userRepository.login(mysqlInsert, password)
    
-
         .then((response) => {
             res.status(200).json(JSON.stringify(response));
-   })
+         })
         .catch((error) => {
             res.status(400).json(error);
-   });
+        });
 
 };
 
 exports.deleteAccount = (req, res, next) => {
-    db.query(`DELETE FROM users WHERE userId = ${req.params.userId}`, (error, result, field) => {
-        if(error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET); 
+    const userId = decodedToken.userId;
+    let mysqlInsert = [userId];
+    userRepository.deleteAccount(mysqlInsert)
+    .then((response) => {
+        res.status(200).json(JSON.stringify(response));
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).json(error);
     });
 };
