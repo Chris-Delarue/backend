@@ -10,11 +10,11 @@ class UserRepository {
     }
 
     signup(mysqlInsert) {
-        let sql = `INSERT INTO users VALUES(NULL,?,?,?,?,NULL)`; 
-        sql = mysql.format(sql, mysqlInsert);
+        let mySql = `INSERT INTO users VALUES(NULL,?,?,?,?,NULL)`; 
+        mySql = mysql.format(mySql, mysqlInsert);
       
         return new Promise((resolve, reject) => {
-            db.query(sql, (error, result) =>{
+            db.query(mySql, (error, result) =>{
                 if(error) {
                     reject({error : 'Email non disponible'});
                 }else{
@@ -25,16 +25,16 @@ class UserRepository {
     }
     
     login(mysqlInsert, password) {
-        let sql = `SELECT * FROM users WHERE email = ?`;
-        sql = mysql.format(sql, mysqlInsert);
+        let mySql = `SELECT * FROM users WHERE email = ?`;
+        mySql = mysql.format(mySql, mysqlInsert);
         
         return new Promise((resolve, reject) => {
-            db.query(sql, (error, result) => {
+            db.query(mySql, (error, result) => {
 
             if(error) reject({ error});
             
             if(!result[0]) {
-                reject ({ error: 'Opps nous NE vous avons pas trouvé!!'});
+                reject ({ error: 'Opps nous ne vous avons pas trouvé!!'});
             }else {
                 bcrypt.compare(password, result[0].password)
                 .then(valid => {
@@ -57,10 +57,10 @@ class UserRepository {
     }
     
     deleteAccount(mysqlInsert) {
-        let mysql = '   DELETE FROM users WHERE id=?';
-        sql = mysql.format(sql, mysqlInsert)
+        let mySql = `DELETE FROM users WHERE userId=?`;
+        mySql = mysql.format(mySql, mysqlInsert)
         return new Promise((resolve, reject) => {
-            db.query(sql, (error, result) => {
+            db.query(mySql, (error, result) => {
                 if(error) return ({ error : 'opppss something went wrong!!'});
                 resolve({ message : 'Nous vous avons supprimé!!'});
             });
