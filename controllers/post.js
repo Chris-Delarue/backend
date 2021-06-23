@@ -1,73 +1,80 @@
 
 const db = require('../db_connect');
+const jwt = require('jsonwebtoken');
+const PostRepository = require('../repository/post');
+require('dotenv').config();
+
+
+let postRepository = new PostRepository();
+
+
 
 exports.getAllPost = (req, res, next) => {
 
-    db.query(`SELECT users.firstname, users.surname, post.userId, post.title, post.content, post.createdAt FROM users INNER JOIN post on users.id = post.userId` , (error, result, field) => {
-        if(error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
+    postRepository.getAllPost()
+    .then((response) => {
+        res.status(200).json(JSON.stringify(response));
     });
 };
 
-exports.newPost = (req, res, next) =>
-    db.query(`INSERT INTO post VALUES (NULL, '${req.body.userId}','${req.body.title}','${req.body.content}',NOW())`, (error, result, field) => {
-        if(error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(201).json({
-            message: 'Super votre post à été publié !'
+exports.newPost = (req, res, next) => {
+
+    let userId = req.body.userId;
+    let title = req.body.title;
+    let content = req.body.content;
+    let createdAt = req.body.createdAt;
+    let mysqlInsert = [userId, title, content, createdAt];
+    postRepository.newPost(mysqlInsert)
+        .then((response) => {
+            res.status(201).json(JSON.stringify(response));
         });
-    });
+}
+    
 
 exports.getOnePost = (req, res, next) => {
-    db.query(`SELECT * FROM post WHERE post.userId = ${req.params.userId}`, (error,result,field) => {
-        if(error) {
-            return res.status(400).json({
-                    error: "opps"
-            });
-        }
-        return res.status(200).json(result);
+
+    postRepository.getOnePost()
+    .then((response) => {
+        res.status(200).json(JSON.stringify(response));
     });
 };
 
-exports.deleteOnePost = (req, res, next) =>{
-    db.query(`DELETE FROM post WHERE post.userId= ${req.params.userId}`, (error, result, field) =>{
-        if(error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
+exports.deletePost = (req, res, next) =>{
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+    const userId = decodedToken.userId;
+    let postId = req.params.id;
+    let mysqlInsert1 = [postid];
+    let mysqlInsert2 = [postId, userId];
+    postRepository.deletePost(mysqlInsert1, mysqlInsert2)
+    .then((respnse) => {
+        res.status(200).json(JSON.stringify(response));
+    });
+    
+};
+
+exports.modifyPost = (req, res, next) => {
+    
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+    const userId = decodedToken.userId;
+    let title = req.body.title;
+    let content = req.body.content;
+    let postId = req.params.id;
+    let mysqlInsert1 = [postId];
+    let mysqlInsert2 = [title, content, postId, userId];
+    postRepository.modifyPost(mysqlInsert1, mysqlInsert2)
+    .then((response) => {
+        res.status(201).json(JSON.stringify(response));
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).json(JSON.stringify(error));
     });
 };
 
-exports.modifyOnePost = (req, res, next) => {
-    db.query(`UPDATE post SET title = '${req.body.title}', content = '${req.body.content}' WHERE post.userId = ${req.params.userId}'`, (error, result, field) => {
-        if(error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
 
-exports.getUserPost= (req, res, next) => {
-    db.query(`SELECT * FROM post WHERE post.userId = ${req.params.userId}`, (error, result, field) => {
-        if(error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
 
 
 

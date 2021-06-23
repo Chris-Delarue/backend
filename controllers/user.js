@@ -1,10 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const mysql= require('mysql');
 const MaskData = require('maskdata');
-const db = require('../db_connect');
 const UserRepository = require('../repository/user');
-
+require('dotenv').config();
 
 let userRepository = new UserRepository();
 
