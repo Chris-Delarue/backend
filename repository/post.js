@@ -24,12 +24,12 @@ class PostRepository {
         });
     }
     newPost(mysqlInsert){
-        let mySql = `INSERT INTO post VALUES('NULL,?,?,?,NOW())`;
+        let mySql = `INSERT INTO post VALUES(NULL,?,?,?,NOW())`;
         mySql = mysql.format(mySql, mysqlInsert) ;
             return new Promise((resolve) => {
-                db.query(mysql, (error, result, fields) => {
+                db.query(mySql, (error, result, fields) => {
                     if(error) throw error;
-                    resolve({ message :'Nouveau post crée !'})
+                    resolve({ message :'Nouveau post crée !'});
                 });
             
             });
@@ -42,7 +42,7 @@ class PostRepository {
                 if(error) throw error;
                 if(mySql2[3] == result[0].userId) {
                     let mySql2 = `  UPDATE post SET title = ?, content =? WHERE postId =? AND userId =?`;
-                    mySql2 = mysql.format(mySql2, mysqlInsert2);
+                    mySql2 = ysql.format(mySql2, mysqlInsert2);
                     db.query(mySql2, (error, result, fields) =>{
                         if(error) throw error;
                         resolve({ message : 'Post modifié!'});
@@ -55,7 +55,7 @@ class PostRepository {
         });
     }
     deletePost(mysqlInsert1, mysqlInsert2) {
-        let mySql1 = `SELECT * FROM post WHERE userId= ?`;
+        let mySql1 = `SELECT * FROM post WHERE postId= ?`;
         mySql1 = mysql.format(mySql1, mysqlInsert1);
         return new Promise((resolve, reject) => {
             db.query(mySql1, (error, result, fields) => {

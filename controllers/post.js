@@ -22,8 +22,8 @@ exports.newPost = (req, res, next) => {
     let userId = req.body.userId;
     let title = req.body.title;
     let content = req.body.content;
-    let createdAt = req.body.createdAt;
-    let mysqlInsert = [userId, title, content, createdAt];
+   
+;    let mysqlInsert = [userId, title, content];
     postRepository.newPost(mysqlInsert)
         .then((response) => {
             res.status(201).json(JSON.stringify(response));
