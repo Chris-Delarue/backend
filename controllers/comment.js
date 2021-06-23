@@ -11,7 +11,7 @@ exports.newComment = (req, res, next) => {
     });
 };
 
-exports.getAllComment = (req, res, next) => {
+exports.getComment = (req, res, next) => {
     db.query(`SELECT users.userId, users.firstname, users.surname, comment.userId, comment.content, comment.createdAt FROM users INNER JOIN comment ON users.userId = comment.userId WHERE comment.postId = ${req.params.userId} ORDER BY comment.createdAt DESC`, (error, result, field) => {
         if (error) {
             return res.status(400).json({
