@@ -6,7 +6,7 @@ class PostRepository {
         console.log('hello');
     }
     getAllPost(){
-        let mySql = `SELECT post.userId, post.title, post.content, post.createdAt, users.firstname, users.surname,  FROM post JOIN users ON post.userId = userId ORDER BY post.createdAt DESC`;
+        let mySql = `SELECT postId, post.userId, post.title, post.content, post.createdAt, users.firstname, users.surname,  FROM post JOIN users ON postId = userId ORDER BY post.createdAt DESC`;
         return new Promise((resolve) => {
             db.query(mySql, (error, result, fields) => {
                 if(error) throw error;
@@ -15,7 +15,7 @@ class PostRepository {
         });
     }
     getOnePost(){
-        let mySql = `SELECT * FROM post WHERE post.userId = ?`;
+        let mySql = `SELECT * FROM post WHERE postId= ?`;
         return new Promise((resolve) => {
             db.query(mySql, (error, result, fields) => {
                 if(error) throw error;
@@ -35,7 +35,7 @@ class PostRepository {
             });
     }
     modifyPost(mysqlInsert1, mysqlInsert2) {
-        let mySql1 = `SELECT * FROM post WHERE userId=?`;
+        let mySql1 = `SELECT * FROM post WHERE postId=?`;
         mySql1 = mysql.format(mySql1, mysqlInsert1);
         return new Promise((resolve) => {
             db.query(mySql1, (error, resuilt, fields)=> {
@@ -60,10 +60,10 @@ class PostRepository {
         return new Promise((resolve, reject) => {
             db.query(mySql1, (error, result, fields) => {
                 if(error) throw error ;
-                if(sqlinsert2[1] == result[0].userid) {
-                    let mySql2 = `DELETE FROM post  WHERE postId =? AND userid =?`;
+                if(mysqlInsert2[1] == result[0].userId) {
+                    let mySql2 = `DELETE FROM post WHERE postId =? AND userId =?`;
                     mySql2 = mysql.format(mySql2, mysqlInsert2);
-                    db.query(mysql2, mysqlInsert2);
+                    db.query(mySql2, mysqlInsert2);
                     if(error) throw error;
                     resolve({ message: 'Post supprimé !'});
                 }else{
