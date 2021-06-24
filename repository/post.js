@@ -6,7 +6,7 @@ class PostRepository {
         console.log('hello');
     }
     getAllPost(){
-        let mySql = `SELECT postId, post.userId, post.title, post.content, post.createdAt, users.firstname, users.surname,  FROM post JOIN users ON postId = userId ORDER BY post.createdAt DESC`;
+        let mySql = `SELECT post.postId, post.userId, post.title, post.content, post.createdAt, users.firstname, users.surname FROM post JOIN users ON post.userId = users.userId ORDER BY post.createdAt DESC`;
         return new Promise((resolve) => {
             db.query(mySql, (error, result, fields) => {
                 if(error) throw error;
@@ -14,8 +14,9 @@ class PostRepository {
             });
         });
     }
-    getOnePost(){
-        let mySql = `SELECT * FROM post WHERE postId= ?`;
+    getOnePost(mysqlInsert, req){
+        let mySql = `SELECT * FROM  post WHERE postId = ` + req.params.postId;
+        mySql = mysql.format(mySql, mysqlInsert, req);
         return new Promise((resolve) => {
             db.query(mySql, (error, result, fields) => {
                 if(error) throw error;
@@ -42,7 +43,7 @@ class PostRepository {
                 if(error) throw error;
                 if(mySql2[3] == result[0].userId) {
                     let mySql2 = `  UPDATE post SET title = ?, content =? WHERE postId =? AND userId =?`;
-                    mySql2 = ysql.format(mySql2, mysqlInsert2);
+                    mySql2 = mysql.format(mySql2, mysqlInsert2);
                     db.query(mySql2, (error, result, fields) =>{
                         if(error) throw error;
                         resolve({ message : 'Post modifié!'});

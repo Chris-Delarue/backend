@@ -23,7 +23,7 @@ exports.newPost = (req, res, next) => {
     let title = req.body.title;
     let content = req.body.content;
    
-;    let mysqlInsert = [userId, title, content];
+   let mysqlInsert = [userId, title, content];
     postRepository.newPost(mysqlInsert)
         .then((response) => {
             res.status(201).json(JSON.stringify(response));
@@ -33,7 +33,11 @@ exports.newPost = (req, res, next) => {
 
 exports.getOnePost = (req, res, next) => {
 
-    postRepository.getOnePost()
+    let userId = req.body.userId;
+    let title = req.body.title;
+    let content = req.body.content;
+    let mysqlInsert = [userId, title, content];
+    postRepository.getOnePost(mysqlInsert, req)
     .then((response) => {
         res.status(200).json(JSON.stringify(response));
     });
