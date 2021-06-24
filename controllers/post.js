@@ -41,14 +41,15 @@ exports.getOnePost = (req, res, next) => {
 
 exports.deletePost = (req, res, next) =>{
 
+
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
     const userId = decodedToken.userId;
-    let postId = req.params.id;
-    let mysqlInsert1 = [postid];
+    let postId = req.params.postId;
+    let mysqlInsert1 = [postId];
     let mysqlInsert2 = [postId, userId];
     postRepository.deletePost(mysqlInsert1, mysqlInsert2)
-    .then((respnse) => {
+    .then((response) => {
         res.status(200).json(JSON.stringify(response));
     });
     
@@ -71,7 +72,11 @@ exports.modifyPost = (req, res, next) => {
     .catch((error) => {
         console.log(error);
         res.status(400).json(JSON.stringify(error));
-    });
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).json(JSON.stringify(errot));
+    })
 };
 
 

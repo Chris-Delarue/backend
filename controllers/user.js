@@ -59,17 +59,23 @@ exports.login =  (req, res, next) => {
             res.status(200).json(JSON.stringify(response));
          })
         .catch((error) => {
-            res.status(400).json(error);
+            res.status(400).json( {error: 'ooppss'});
         });
 
 };
 
 exports.deleteAccount = (req, res, next) => {
+
+    //let userId = req.params.userId;
+
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET); 
     const userId = decodedToken.userId;
+    
     let mysqlInsert = [userId];
+    
     userRepository.deleteAccount(mysqlInsert)
+   
     .then((response) => {
         res.status(200).json(JSON.stringify(response));
     })

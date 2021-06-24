@@ -1,34 +1,48 @@
-const db = require('../db_connect');
+
+const jwt = require('jsonwebtoken');
+const CommentRepository = require('../repository/comment');
+require('dotenv').config();
+
+let commentRepository = new CommentRepository();
 
 exports.newComment = (req, res, next) => {
-    db.query(`INSERT INTO comment VALUES ( NULL, ${req.params.userId}, '${req.body.content}', NOW())`, (error, result, field)=>  {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
+
+    let postId = req.body.postId;
+    let userId = req.body.userId;
+    let content = req.body.content;
+    let mysqlInsert = [postId, userId, content];
+    commentRepository.newComment(mysqlInsert)
+    .then((response) => {
+        res.status(201).json(JSON.stringify(response));
     });
+
+    
 };
 
 exports.getComment = (req, res, next) => {
-    db.query(`SELECT users.userId, users.firstname, users.surname, comment.userId, comment.content, comment.createdAt FROM users INNER JOIN comment ON users.userId = comment.userId WHERE comment.postId = ${req.params.userId} ORDER BY comment.createdAt DESC`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result)
-    });
+
+   let postId = req.body.postId;
+   let mysqlInsert = [postId];
+    commentRepository.getComment(mysqlInsert)
+    .then((response) => {
+        res.status(200).json(JSON.stringify(response));
+    })
 };
 
 exports.deleteComment= (req, res, next) =>{
-    db.query(`DELETE FROM comment WHERE comment.userId = ${req.params.userId}`, (error, result, fiels) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result)
-    });
+    
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+    const userId = decodedToken.userId;
+    let commentId = req.params.commentId;
+    let mysqlInsert1 = [commentId];
+    let mysqlInsert2 = [commentId, userId];
+    commentRepository.deletePost(mysqlInsert1, mysqlInsert2)
+    .then((response) => {
+        res.status(200).json(JSON.stringify(response));
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).json(JSON.stringify(error)) ;   
+    }) ;
 };
