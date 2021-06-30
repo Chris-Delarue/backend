@@ -17,7 +17,7 @@ class UserRepository {
         return new Promise((resolve, reject) => {
             db.query(mySql, (error, result) =>{
                 if(error) {
-                    reject({error : 'Email non disponible'});
+                    reject(error);
                 }else{
                     resolve({ message: 'Bienvenue sur notre reseau!!'});
                 }

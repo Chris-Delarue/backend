@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
         db.query(mySql,(error, result)=>{
             if(error) reject({ error});
             if(result[0]['COUNT(userId)'] !== 1) {
-                throw 'Le token n\'est pas valide';
+                throw 'Le token n\'est pas valide !';
             
         } else {
             next();    
@@ -29,3 +29,4 @@ module.exports = (req, res, next) => {
         res.status(401).json({error : new Error('Requête non authentifiée !')});
     }
 };
+

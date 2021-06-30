@@ -1,8 +1,6 @@
 const db = require('../db_connect');
 const mysql = require('mysql');
 
-
-
 class CommentRepository {
 
     constructor(){
@@ -20,7 +18,7 @@ class CommentRepository {
         });
     }
     getComment(mysqlInsert){
-        let mySql = `SELECT commentId, comment.postId, comment.userId, comment.content, comment.createdAt, users.firstname, users.surname, FROM comment JOIN users on commentId =  userId ORDER BY comment.createdAt DESC`;
+        let mySql = `SELECT comment.commentId, comment.postId, comment.userId, comment.content, comment.createdAt, users.firstname, users.surname FROM comment JOIN users on comment.userId =  users.userId WHERE commentId = ? ORDER BY comment.createdAt DESC`;
         mySql = mysql.format(mySql, mysqlInsert);
         return new Promise((resolve) => {
             db.query(mySql, (error, result, fields) => {
@@ -32,17 +30,21 @@ class CommentRepository {
     deleteComment(mysqlInsert1, mysqlInsert2) {
         let mySql1 = `SELECT * FROM comment WHERE commentId = ?`;
         mySql1 = mysql.format(mySql1, mysqlInsert1);
-        return new Promise((resolve) => {
+        console.log(mySql1)
+        return new Promise((resolve, reject) => {
             db.query(mySql1, (error, result, fields) => {
                 if(error) throw error;
-                if(mysqlInsert2[1] == reslut[0].userid) {
+                
+                if(mysqlInsert2[2] == result[0].userId) {
                     let mySql2 = `DELETE FROM comment WHERE commentId = ? and userId = ?`;
-                    mySql2 = mysql.format(mySql2, (error, result, fields) => {
+                    mySql2 = mysql.format(mySql2, mysqlInsert2);
+                    
+                    db.query(mySql2, (error, result, fields) => {
                         if(error) throw error;
-                        resolve({ message : 'commentaire supprimé'});
-                    });
+                        resolve({ message : 'Commentaire supprimé !'});
+                       }); 
                 }else{
-                    reject({error})
+                    reject({error: 'what!!'});
                 }
             });
         });
