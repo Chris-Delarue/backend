@@ -11,7 +11,7 @@ class UserRepository {
     }
 
     signup(mysqlInsert) {
-        let mySql = `INSERT INTO users VALUES(NULL,?,?,?,?,NULL)`; 
+        let mySql = `INSERT INTO users VALUES(NULL,?,?,?,?,?,NULL)`; 
         mySql = mysql.format(mySql, mysqlInsert);
       
         return new Promise((resolve, reject) => {
