@@ -13,7 +13,7 @@ exports.newComment = (req, res, next) => {
     let mysqlInsert = [postId, userId, content];
     commentRepository.newComment(mysqlInsert)
     .then((response) => {
-        res.status(201).json(JSON.stringify(response));
+        res.status(201).json(response);
     });
 
     
@@ -25,7 +25,7 @@ exports.getComment = (req, res, next) => {
    let mysqlInsert = [postId];
     commentRepository.getComment(mysqlInsert)
     .then((response) => {
-        res.status(200).json(JSON.stringify(response));
+        res.status(200).json(response);
     })
 };
 
@@ -37,10 +37,10 @@ exports.deleteComment= (req, res, next) =>{
     let mysqlInsert2 = [commentId, userId];
     commentRepository.deletePost(mysqlInsert1, mysqlInsert2)
     .then((response) => {
-        res.status(200).json(JSON.stringify(response));
+        res.status(200).json(response);
     })
     .catch((error) => {
         console.log(error);
-        res.status(400).json(JSON.stringify(error)) ;   
+        res.status(400).json(response) ;   
     }) ;
 };
