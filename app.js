@@ -2,7 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const rateLimit = require("express-rate-limit");
-const path = require('path');
+//const path = require('path');
 require('dotenv').config();
 
 const app = express();
