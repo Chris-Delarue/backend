@@ -1,3 +1,4 @@
+
 const jwt = require('jsonwebtoken');
 const CommentRepository = require('../repository/comment');
 require('dotenv').config();
@@ -30,9 +31,7 @@ exports.getComment = (req, res, next) => {
 
 exports.deleteComment= (req, res, next) =>{
     
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-    const userId = decodedToken.userId;
+   
     let commentId = req.params.commentId;
     let mysqlInsert1 = [commentId];
     let mysqlInsert2 = [commentId, userId];
@@ -44,4 +43,5 @@ exports.deleteComment= (req, res, next) =>{
         console.log(error);
         res.status(400).json(JSON.stringify(error)) ;   
     }) ;
-};
+
+

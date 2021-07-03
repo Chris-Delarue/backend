@@ -1,8 +1,20 @@
 
+
 const PostRepository = require('../repository/post');
 
 
 let postRepository = new PostRepository();
+
+const db = require('../db_connect');
+const jwt = require('jsonwebtoken');
+const PostRepository = require('../repository/post');
+require('dotenv').config();
+
+
+let postRepository = new PostRepository();
+
+
+
 
 exports.getAllPost = (req, res, next) => {
 
@@ -17,8 +29,13 @@ exports.newPost = (req, res, next) => {
     let userId = req.body.userId;
     let title = req.body.title;
     let content = req.body.content;
+
     let createdAt = req.body.createdAt;
     let mysqlInsert = [userId, title, content, createdAt];
+
+   
+   let mysqlInsert = [userId, title, content];
+
     postRepository.newPost(mysqlInsert)
         .then((response) => {
             res.status(201).json(JSON.stringify(response));
@@ -28,14 +45,21 @@ exports.newPost = (req, res, next) => {
 
 exports.getOnePost = (req, res, next) => {
 
+
     postRepository.getOnePost()
+
+    let userId = req.body.userId;
+    let title = req.body.title;
+    let content = req.body.content;
+    let mysqlInsert = [userId, title, content];
+    postRepository.getOnePost(mysqlInsert, req)
+
     .then((response) => {
         res.status(200).json(JSON.stringify(response));
     });
 };
 
 exports.deletePost = (req, res, next) =>{
-
 
     let postId = req.params.id;
     let mysqlInsert1 = [postid];
@@ -49,7 +73,6 @@ exports.deletePost = (req, res, next) =>{
 
 exports.modifyPost = (req, res, next) => {
     
-   
     let title = req.body.title;
     let content = req.body.content;
     let postId = req.params.id;
@@ -62,7 +85,22 @@ exports.modifyPost = (req, res, next) => {
     .catch((error) => {
         console.log(error);
         res.status(400).json(JSON.stringify(error));
+
     });
 };
+
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).json(JSON.stringify(errot));
+    })
+};
+
+
+
+
+
+
+
 
 
