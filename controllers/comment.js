@@ -31,9 +31,7 @@ exports.getComment = (req, res, next) => {
 
 exports.deleteComment= (req, res, next) =>{
     
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-    const userId = decodedToken.userId;
+   
     let commentId = req.params.commentId;
     let mysqlInsert1 = [commentId];
     let mysqlInsert2 = [commentId, userId];

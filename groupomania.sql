@@ -28,6 +28,7 @@ CREATE TABLE `users` (
   `firstname` varchar(45) NOT NULL,
   `surname` varchar(45) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `passwordComfirm` varchar(255) NOT NULL,
   `isAdmin` tinyint NULL DEFAULT '0',
   PRIMARY KEY (`userId`),
   UNIQUE KEY `email` (`email`)
