@@ -33,14 +33,15 @@ exports.deleteComment= (req, res, next) =>{
     
    
     let commentId = req.params.commentId;
+    let userId = req.body.userId;
     let mysqlInsert1 = [commentId];
     let mysqlInsert2 = [commentId, userId];
-    commentRepository.deletePost(mysqlInsert1, mysqlInsert2)
+    commentRepository.deleteComment(mysqlInsert1, mysqlInsert2)
     .then((response) => {
         res.status(200).json(response);
     })
     .catch((error) => {
         console.log(error);
-        res.status(400).json(response) ;   
+        res.status(400).json(error) ;   
     }) ;
 };

@@ -11,15 +11,17 @@ class UserRepository {
     }
 
     signup(mysqlInsert) {
-        let mySql = `INSERT INTO users VALUES(NULL,?,?,?,?,?, NULL)`; 
+        let mySql = `INSERT INTO users VALUES(NULL, ?, ?, ?, ?, ?, NULL)`; 
         mySql = mysql.format(mySql, mysqlInsert);
        
         return new Promise((resolve, reject) => {
             db.query(mySql, (error, result) =>{
+                
                 if(error) {
-                    reject({error : 'Email non disponible'});
+                    reject({error : 'Une erreur est survenue !'});
+                    
                 }else{
-                    resolve({ message: 'Bienvenue sur notre reseau!!'});
+                    resolve({ message: 'Bienvenue sur notre réseau!!'});
                 }
             });
         });

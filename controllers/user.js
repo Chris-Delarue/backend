@@ -20,24 +20,26 @@ exports.signup = (req, res, next) =>{
         let surname = req.body.surname;
         let password = req.body.password;
         let passwordConfirm = req.body.passwordConfirm;
-        
+       
         if(password === passwordConfirm) {
         bcrypt.hash(password, 10)
             .then(hash => {
-                let mysqlInsert = [email, firstname, surname, hash, hash];
+                let mysqlInsert = [email, firstname,  surname, hash, hash];
+                
                 userRepository.signup(mysqlInsert)
-            
+                
                 .then((response) => {
-                    
                     res.status(201).json(response);
+                    
                 })
                 .catch((error) => {
-                    
                     res.status(400).json(error);
                 });
+                
+                
             })
-            .catch(error => res.status(500).json(error));
-        }  
+            .catch((error) => res.status(500).json(error));
+        } 
 };
 
 exports.login =  (req, res, next) => {
