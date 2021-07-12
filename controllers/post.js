@@ -65,7 +65,8 @@ exports.modifyPost = (req, res, next) => {
 
     let title = req.body.title;
     let content = req.body.content;
-    let postId = req.params.id;
+    let postId = req.params.postId;
+    let userId = req.body.userId;
     let mysqlInsert1 = [postId];
     let mysqlInsert2 = [title, content, postId, userId];
     postRepository.modifyPost(mysqlInsert1, mysqlInsert2)

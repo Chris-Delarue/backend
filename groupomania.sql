@@ -29,7 +29,7 @@ CREATE TABLE `users` (
   `surname` varchar(45) NOT NULL,
   `password` varchar(255) NOT NULL,
   `passwordConfirm` varchar(255) NOT NULL,
-  `isAdmin` tinyint NULL DEFAULT '0',
+  `isAdmin` tinyint  NULL DEFAULT '0',
   PRIMARY KEY (`userId`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -40,7 +40,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`userId`,`email`, `firstname`, `surname`, `password`, `isAdmin`) VALUES (17,'******@*********','tata','toto','$2b$10$og23k1D448JnWfQ8gjPQIOzQdO0ZIsIAmp1n7OCxzL0PkyfarrNhW',0);
+INSERT INTO `users` (`userId`,`email`, `firstname`, `surname`, `password`,`passwordConfirm` `isAdmin`) VALUES (17,'******@*********','tata','toto','$2b$10$og23k1D448JnWfQ8gjPQIOzQdO0ZIsIAmp1n7OCxzL0PkyfarrNhW', 0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

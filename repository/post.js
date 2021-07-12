@@ -38,23 +38,24 @@ class PostRepository {
     modifyPost(mysqlInsert1, mysqlInsert2) {
         let mySql1 = `SELECT * FROM post WHERE postId=?`;
         mySql1 = mysql.format(mySql1, mysqlInsert1);
-        return new Promise((resolve) => {
-            db.query(mySql1, (error, resuilt, fields)=> {
+        return new Promise((resolve, reject) => {
+            db.query(mySql1, (error, result, fields)=> {
                 if(error) throw error;
-                if(mySql2[3] == result[0].userId) {
+                if(mysqlInsert2[3] == result[0].userId) {
                     let mySql2 = `  UPDATE post SET title = ?, content =? WHERE postId =? AND userId =?`;
                     mySql2 = mysql.format(mySql2, mysqlInsert2);
                     db.query(mySql2, (error, result, fields) =>{
                         if(error) throw error;
                         resolve({ message : 'Post modifié!'});
-                    })
+                    });
                 }else{
-                    reject({ error});
+                    reject({ error : 'opps I\'m still here !!!'});
 
                 }
             });
         });
     }
+    
     deletePost(mysqlInsert1, mysqlInsert2) {
         let mySql1 = `SELECT * FROM post WHERE postId= ?`;
         mySql1 = mysql.format(mySql1, mysqlInsert1);
