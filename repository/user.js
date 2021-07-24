@@ -11,24 +11,24 @@ class UserRepository {
     }
 
     signup(mysqlInsert) {
-        let mySql = `INSERT INTO users VALUES(NULL, ?, ?, ?, ?, ?, NULL)`; 
+        let mySql = `INSERT INTO users VALUES(NULL, ?, ?, ?, ?, ?, ?, NULL)`; 
         mySql = mysql.format(mySql, mysqlInsert);
-       
+     
         return new Promise((resolve, reject) => {
-            db.query(mySql, (error, result) =>{
+            db.query(mySql, (error, result) => {
                 
                 if(error) {
+                    console.log(error)
                     reject({error : 'Une erreur est survenue !'});
-                    
                 }else{
-                    resolve({ message: 'Bienvenue sur notre réseau!!'});
+                    resolve({ message: 'Bienvenue sur votre réseau!!'});
                 }
             });
         });
     }
     
     login(mysqlInsert, password) {
-        let mySql = `SELECT * FROM users WHERE email = ?`;
+        let mySql = `SELECT * FROM users WHERE emailHash = ?`;
         mySql = mysql.format(mySql, mysqlInsert);
         
         return new Promise((resolve, reject) => {
@@ -38,13 +38,14 @@ class UserRepository {
             console.log(result[0]);
 
             if(!result[0]) {
-                reject({ message: 'Opps nous ne vous avons pas trouvé!!'});
+                reject({ error: 'Opps nous ne vous avons pas trouvé!!'});
             }else {
                 bcrypt.compare(password, result[0].password)
                 .then(valid => {
                     if(!valid) return reject({ message: 'Veuillez vérifier votre émail et/ou votre mot de passe !'});
                     resolve({
                         userId : result[0].userId,
+                        firstname : result[0].firstname,
                         token: jwt.sign(
                         {userId: result[0].userId
                         },
