@@ -10,7 +10,7 @@ class CommentRepository {
     }
 
     newComment(mysqlInsert) {
-        let mySql = `INSERT INTO comment VALUES (NULL,?,?,?,NOW())`;
+        let mySql = `INSERT INTO comment VALUES(NULL,?,?,?,NOW())`;
         mySql = mysql.format(mySql, mysqlInsert);
         return new Promise((resolve) => {
             db.query(mySql, (error, result, fields) => {
@@ -20,7 +20,7 @@ class CommentRepository {
         });
     }
     getComment(mysqlInsert){
-        let mySql = `SELECT comment.commentId, comment.postId, comment.userId, comment.content, comment.createdAt, users.firstname, users.surname, FROM comment JOIN users on commentId =  userId ORDER BY comment.createdAt DESC`;
+        let mySql = `SELECT comment.commentId, comment.postId, comment.userId,  comment.content, comment.createdAt, users.firstname, users.surname  FROM users INNER JOIN comment ON users.userId = comment.userId WHERE postId = postId  ORDER BY comment.createdAt DESC`;
         mySql = mysql.format(mySql, mysqlInsert);
         return new Promise((resolve) => {
             db.query(mySql, (error, result, fields) => {

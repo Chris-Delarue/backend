@@ -20,6 +20,7 @@ module.exports = (req, res, next) => {
                 throw 'Le token n\'est pas valide';
             
         } else {
+            res.locals.userId = userId;
             next();    
         }
         });
@@ -27,5 +28,6 @@ module.exports = (req, res, next) => {
     catch 
     {
         res.status(401).json({error : new Error('Requête non authentifiée !')});
+       
     }
 };
