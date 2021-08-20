@@ -64,7 +64,7 @@ exports.deleteAccount = (req, res, next) => {
     
     .then((response) => {
         res.status(200).json(response);
-        console.log(response)
+        console.log(response);
     })
     .catch((error) => {
         res.status(400).json(error);

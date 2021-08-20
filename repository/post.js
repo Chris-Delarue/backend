@@ -15,7 +15,7 @@ class PostRepository {
         });
     }
     getOnePost(mysqlInsert, req){
-        let mySql = `SELECT * FROM  post WHERE postId = ` + req.params.postId;
+        let mySql = 'SELECT * FROM  post WHERE postId ' ;
         mySql = mysql.format(mySql, mysqlInsert, req);
         return new Promise((resolve) => {
             db.query(mySql, (error, result, fields) => {
