@@ -13,12 +13,13 @@ exports.signup = (req, res, next) =>{
         let surname = req.body.surname;
         let password = req.body.password;
         let passwordConfirm = req.body.passwordConfirm;
+        let isAdmin = 0;
        
             if(password === passwordConfirm)
              {
             bcrypt.hash(password, 10)
             .then(hash => {
-                let mysqlInsert = [emailCrypted, emailHash, firstname,  surname, hash, hash];
+                let mysqlInsert = [emailCrypted, emailHash, firstname,  surname, hash, hash, isAdmin];
                
                 userRepository.signup(mysqlInsert)
                

@@ -11,7 +11,7 @@ class UserRepository {
     }
 
     signup(mysqlInsert) {
-        let mySql = `INSERT INTO users VALUES(NULL, ?, ?, ?, ?, ?, ?, NULL)`; 
+        let mySql = ` INSERT INTO users VALUES(NULL, ?, ?, ?, ?, ?, ?, 0) `; 
         mySql = mysql.format(mySql, mysqlInsert);
      
         return new Promise((resolve, reject) => {
@@ -43,11 +43,14 @@ class UserRepository {
                 bcrypt.compare(password, result[0].password)
                 .then(valid => {
                     if(!valid) return reject({ message: 'Veuillez vérifier votre émail et/ou votre mot de passe !'});
+                  
                     resolve({
+                        
                         userId : result[0].userId,
                         firstname : result[0].firstname,
+                        isAdmin : result[0].isAdmin,
                         token: jwt.sign(
-                        {userId: result[0].userId
+                        {userId: result[0].userId, 
                         },
                         process.env.TOKEN_SECRET,
                         {

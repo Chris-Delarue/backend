@@ -6,7 +6,7 @@ class PostRepository {
         console.log('hello');
     }
     getAllPost(){
-        let mySql = `SELECT post.postId, post.userId, post.title, post.content, post.createdAt, users.firstname, users.surname FROM post JOIN users ON post.userId = users.userId ORDER BY post.createdAt DESC`;
+        let mySql = `SELECT post.postId, post.userId, post.title, post.content, post.createdAt, users.firstname, users.surname  FROM post JOIN users ON post.userId = users.userId ORDER BY post.createdAt DESC`;
         return new Promise((resolve) => {
             db.query(mySql, (error, result, fields) => {
                 if(error) throw error;
@@ -14,9 +14,9 @@ class PostRepository {
             });
         });
     }
-    getOnePost(mysqlInsert, req){
-        let mySql = 'SELECT * FROM  post WHERE postId ' ;
-        mySql = mysql.format(mySql, mysqlInsert, req);
+    getOnePost(mysqlInsert){
+        let mySql = 'SELECT * FROM post WHERE postId = ?' ;
+        mySql = mysql.format(mySql, mysqlInsert);
         return new Promise((resolve) => {
             db.query(mySql, (error, result, fields) => {
                 if(error) throw error;
@@ -25,7 +25,7 @@ class PostRepository {
         });
     }
     newPost(mysqlInsert){
-        let mySql = `INSERT INTO post VALUES(NULL,?,?,?,NOW())`;
+        let mySql = `INSERT INTO post VALUES(NULL,?,?,?,NOW()) `;
         mySql = mysql.format(mySql, mysqlInsert) ;
             return new Promise((resolve) => {
                 db.query(mySql, (error, result, fields) => {
@@ -42,14 +42,14 @@ class PostRepository {
             db.query(mySql1, (error, result, fields)=> {
                 if(error) throw error;
                 if(mysqlInsert2[3] == result[0].userId) {
-                    let mySql2 = `  UPDATE post SET title = ?, content =? WHERE postId =? AND userId =?`;
+                    let mySql2 = `UPDATE post SET title = ?, content =? WHERE postId =? AND userId =?`;
                     mySql2 = mysql.format(mySql2, mysqlInsert2);
                     db.query(mySql2, (error, result, fields) =>{
                         if(error) throw error;
                         resolve({ message : 'Post modifié!'});
                     });
                 }else{
-                    reject({ error : 'opps I\'m still here !!!'});
+                    reject({ error : 'opps pas modifié !!!'});
 
                 }
             });
@@ -57,7 +57,7 @@ class PostRepository {
     }
     
     deletePost(mysqlInsert1, mysqlInsert2) {
-        let mySql1 = `SELECT * FROM post WHERE postId= ?`;
+        let mySql1 = `SELECT * FROM post WHERE postId = ?`;
         mySql1 = mysql.format(mySql1, mysqlInsert1);
         return new Promise((resolve, reject) => {
             db.query(mySql1, (error, result, fields) => {
