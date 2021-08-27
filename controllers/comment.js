@@ -10,6 +10,7 @@ exports.newComment = (req, res, next) => {
     let userId = res.locals.userId;
     let content = req.body.content;
     let mysqlInsert = [postId, userId, content];
+    
     commentRepository.newComment(mysqlInsert)
     .then((response) => {
         console.log(response)

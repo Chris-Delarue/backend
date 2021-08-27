@@ -11,6 +11,7 @@ module.exports = (req, res, next) => {
      
         const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET); 
         const userId = decodedToken.userId;
+        
         let mysqlInsert = [userId];
         let mySql = 'SELECT COUNT(userId) FROM users WHERE userId = ?';
         mySql = mysql.format(mySql, mysqlInsert);

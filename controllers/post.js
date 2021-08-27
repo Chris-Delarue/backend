@@ -41,11 +41,12 @@ exports.newPost = (req, res, next) => {
 
 exports.getOnePost = (req, res, next) => {
 
+    let postId = req.params.postId;
     let userId = res.locals.userId;
     let title = req.body.title;
     let content = req.body.content;
-    let mysqlInsert = [userId, title, content];
-    postRepository.getOnePost(mysqlInsert, req)
+    let mysqlInsert = [postId, userId, title, content];
+    postRepository.getOnePost(mysqlInsert)
     .then((response) => {
         res.status(200).json(response);
         console.log(response);
