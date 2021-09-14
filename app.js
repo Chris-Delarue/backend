@@ -14,7 +14,7 @@ const limiter = rateLimit({
 });
 
 const postRoutes = require('./routes/post');
-const commentRoutes = require('./routes/comment');
+//const commentRoutes = require('./routes/comment');
 const userRoutes = require('./routes/user');
 
 app.use(limiter);
@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 //});
 
 app.use('/api/post', postRoutes);
-app.use('/api/comment', commentRoutes);
+//app.use('/api/comment', commentRoutes);
 app.use('/api/auth', userRoutes);
 
 module.exports = app;

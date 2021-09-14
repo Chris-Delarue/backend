@@ -11,7 +11,9 @@ class UserRepository {
     }
 
     signup(mysqlInsert) {
-        let mySql = ` INSERT INTO users VALUES(NULL, ?, ?, ?, ?, ?, ?, 0) `; 
+        let mySql = ` 
+        INSERT INTO users (userId, email,emailHash, firstname, surname, password, passwordConfirm, isAdmin) 
+        VALUES(NULL, ?, ?, ?, ?, ?, ?, 0) `; 
         mySql = mysql.format(mySql, mysqlInsert);
      
         return new Promise((resolve, reject) => {
@@ -28,7 +30,9 @@ class UserRepository {
     }
     
     login(mysqlInsert, password) {
-        let mySql = `SELECT * FROM users WHERE emailHash = ?`;
+        let mySql = `
+        SELECT * FROM users 
+        WHERE emailHash = ?`;
         mySql = mysql.format(mySql, mysqlInsert);
         
         return new Promise((resolve, reject) => {
@@ -65,7 +69,9 @@ class UserRepository {
     }
     
     deleteAccount(mysqlInsert) {
-        let mySql = `DELETE FROM users WHERE userId = ?`;
+        let mySql = `
+        DELETE FROM users 
+        WHERE userId = ?`;
         mySql = mysql.format(mySql, mysqlInsert);
         return new Promise((resolve, reject) => {
             db.query(mySql, (error, result) => {
