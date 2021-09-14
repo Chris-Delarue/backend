@@ -1,6 +1,4 @@
 
-const db = require('../db_connect');
-const jwt = require('jsonwebtoken');
 const PostRepository = require('../repository/post');
 require('dotenv').config();
 
@@ -15,6 +13,10 @@ exports.getAllPost = (req, res, next) => {
     .then((response) => {
         res.status(200).json(response);
        // console.log(response)
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).json(error) ;   
     });
 };
 
@@ -27,15 +29,15 @@ exports.newPost = (req, res, next) => {
    let mysqlInsert = [userId, title, content];
 
     postRepository.newPost(mysqlInsert)
-        .then((response) => {
-            res.status(201).json(response);
-            console.log(response);
-        })
-        .catch((error) => {
+    .then((response) => {
+        res.status(201).json(response);
+        console.log(response);
+    })
+    .catch((error) => {
            
-            res.status(400).json(error);
-            console.log('oulala!!');
-        });
+        res.status(400).json(error);
+        console.log('oulala!!');
+    });
 }
     
 
@@ -93,6 +95,57 @@ exports.modifyPost = (req, res, next) => {
     });
 };
 
+exports.newComment = (req, res, next) => {
+
+    let postId = req.body.postId;
+    let userId = res.locals.userId;
+    let content = req.body.content;
+    let mysqlInsert = [postId, userId, content];
+    
+    postRepository.newComment(mysqlInsert)
+    .then((response) => {
+        console.log(response)
+        res.status(201).json(response);
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).json(error) ;   
+    });
+};
+
+exports.getComment = (req, res, next) => {
+
+    let postId = req.params.postId;
+    let mysqlInsert = [postId];
+    postRepository.getComment(mysqlInsert)
+    .then((response) => {
+        res.status(200).json(response);
+        console.log(response);
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).json(error) ;   
+    });
+};
+
+
+exports.deleteComment = (req, res, next) => {
+    
+    let commentId = req.params.commentId;
+    let userId = res.locals.userId;
+    let mysqlInsert1 = [commentId];
+    let mysqlInsert2 = [commentId, userId];
+    console.log(commentId, userId)
+
+    postRepository.deleteComment(mysqlInsert1, mysqlInsert2)
+    .then((response) => {
+        res.status(200).json(response);
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).json(error) ;   
+    });
+};
 
 
 
