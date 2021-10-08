@@ -10,9 +10,9 @@ let postRepository = new PostRepository();
 exports.getAllPost = (req, res, next) => {
 
     postRepository.getAllPost()
-    .then((response) => {
+    .then( (response) => {
         res.status(200).json(response);
-       // console.log(response)
+       console.log(response)
     })
     .catch((error) => {
         console.log(error);
@@ -50,8 +50,9 @@ exports.getOnePost = (req, res, next) => {
     let mysqlInsert = [postId, userId, title, content];
     postRepository.getOnePost(mysqlInsert)
     .then((response) => {
+         console.log(response);
         res.status(200).json(response);
-        console.log(response);
+       
     })
     .catch((error) => {
         console.log(error);
@@ -65,7 +66,9 @@ exports.deletePost = (req, res, next) =>{
     let userId = res.locals.userId;
     let mysqlInsert1 = [postId];
     let mysqlInsert2 = [postId, userId];
+    console.log(mysqlInsert2)
     postRepository.deletePost(mysqlInsert1, mysqlInsert2)
+    
     .then((response) => {
         res.status(200).json(response);
     })
@@ -135,7 +138,7 @@ exports.deleteComment = (req, res, next) => {
     let userId = res.locals.userId;
     let mysqlInsert1 = [commentId];
     let mysqlInsert2 = [commentId, userId];
-    console.log(commentId, userId)
+    console.log()
 
     postRepository.deleteComment(mysqlInsert1, mysqlInsert2)
     .then((response) => {
