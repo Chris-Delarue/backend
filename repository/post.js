@@ -79,15 +79,17 @@ class PostRepository {
             db.query(mySql1, (error, result, fields) => {
                 if(error) throw error ;
                 if(mysqlInsert2[1] == result[0].userId) {
+                    
                     let mySql2 = `
                     DELETE FROM post 
-                    WHERE postId =? AND userId =?`;
+                    WHERE postId =? AND userId =? ` ;
                     mySql2 = mysql.format(mySql2, mysqlInsert2);
-                    db.query(mySql2, mysqlInsert2);
+                    db.query(mySql2, (error, result, fields)=> {
                     if(error) throw error;
-                    resolve({ message: 'Post supprimé !'});
+                    resolve({ message: 'Post supprimé !!'});
+                 }); 
                 }else{
-                    reject({error});
+                    reject({error: 'Oppss post non supprimé !!'});
                 }
             });
         });
@@ -134,6 +136,7 @@ class PostRepository {
                     DELETE FROM comment 
                     WHERE commentId = ? AND userId = ?`;
                     mySql2 = mysql.format(mySql2, mysqlInsert2);
+                    
                         db.query(mySql2, mysqlInsert2);
                         if(error) throw error;
                         resolve({ message : 'commentaire supprimé'});

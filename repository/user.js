@@ -55,10 +55,11 @@ class UserRepository {
                         isAdmin : result[0].isAdmin,
                         token: jwt.sign(
                         {userId: result[0].userId, 
+                        
                         },
                         process.env.TOKEN_SECRET,
                         {
-                        expiresIn: '24h'
+                        expiresIn: '60m'
                         })
                     });
                 })
