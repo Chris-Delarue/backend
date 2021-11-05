@@ -19,7 +19,7 @@ exports.signup = (req, res, next) =>{
              {
             bcrypt.hash(password, 10)
             .then(hash => {
-                let mysqlInsert = [emailCrypted, emailHash, firstname,  surname, hash, hash, isAdmin];
+                let mysqlInsert = [emailCrypted, emailHash, firstname, surname, hash, hash, isAdmin];
                
                 userRepository.signup(mysqlInsert)
                
@@ -41,13 +41,11 @@ exports.signup = (req, res, next) =>{
 exports.login =  (req, res, next) => {
  
     let emailHash = CryptoJS.MD5(req.body.email).toString();
+    let password = req.body.password;
+    let mysqlInsert = [emailHash];
     
-   let email = emailHash ;
-   let password = req.body.password;
-   let mysqlInsert = [email];
+    userRepository.login(mysqlInsert, password)
 
-   userRepository.login(mysqlInsert, password)
-   
         .then((response) => {
             res.status(200).json(response);
            console.log(response);
