@@ -32,14 +32,13 @@ class UserRepository {
     login(mysqlInsert, password) {
         let mySql = `
         SELECT * FROM users 
-        WHERE emailHash = ?`;
+        WHERE emailHash = ? `;
         mySql = mysql.format(mySql, mysqlInsert);
         
         return new Promise((resolve, reject) => {
             db.query(mySql, (error, result) => {
 
             if(error) reject(error);
-            console.log(result[0]);
 
             if(!result[0]) {
                 reject({ error: 'Opps nous ne vous avons pas trouvé!!'});
@@ -47,19 +46,21 @@ class UserRepository {
                 bcrypt.compare(password, result[0].password)
                 .then(valid => {
                     if(!valid) return reject({ message: 'Veuillez vérifier votre émail et/ou votre mot de passe !'});
-                  
+
                     resolve({
-                        
                         userId : result[0].userId,
                         firstname : result[0].firstname,
+                        surname : result[0].surname,
                         isAdmin : result[0].isAdmin,
                         token: jwt.sign(
-                        {userId: result[0].userId, 
+                        {
+                        userId: result[0].userId, 
+                        isAdmin: result[0].isAdmin
                         
                         },
                         process.env.TOKEN_SECRET,
                         {
-                        expiresIn: '60m'
+                        expiresIn: '2h'
                         })
                     });
                 })

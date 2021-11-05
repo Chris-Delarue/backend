@@ -3,8 +3,8 @@ const PostRepository = require('../repository/post');
 require('dotenv').config();
 
 
-let postRepository = new PostRepository();
 
+let postRepository = new PostRepository();
 
 
 exports.getAllPost = (req, res, next) => {
@@ -21,12 +21,16 @@ exports.getAllPost = (req, res, next) => {
 };
 
 exports.newPost = (req, res, next) => {
-
+    console.log(req.body)
+    //console.log(JSON.parse(req.body))
     let userId = res.locals.userId;
     let title = req.body.title;
     let content = req.body.content;
+    let imageURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+    
+    console.log(req.file.filename);
    
-   let mysqlInsert = [userId, title, content];
+   let mysqlInsert = [userId, title, content, imageURL];
 
     postRepository.newPost(mysqlInsert)
     .then((response) => {
@@ -64,12 +68,14 @@ exports.deletePost = (req, res, next) =>{
 
     let postId = req.params.postId;
     let userId = res.locals.userId;
+    let isAdmin = res.locals.isAdmin;
     let mysqlInsert1 = [postId];
     let mysqlInsert2 = [postId, userId];
-    console.log(mysqlInsert2)
-    postRepository.deletePost(mysqlInsert1, mysqlInsert2)
+    console.log(mysqlInsert2);
+    postRepository.deletePost(mysqlInsert1, mysqlInsert2, isAdmin)
     
     .then((response) => {
+        console.log(response)
         res.status(200).json(response);
     })
     .catch((error) => {
@@ -86,9 +92,10 @@ exports.modifyPost = (req, res, next) => {
     let content = req.body.content;
     let postId = req.params.postId;
     let userId = res.locals.userId;
+    let isAdmin = res.locals.isAdmin;
     let mysqlInsert1 = [postId];
     let mysqlInsert2 = [title, content, postId, userId];
-    postRepository.modifyPost(mysqlInsert1, mysqlInsert2)
+    postRepository.modifyPost(mysqlInsert1, mysqlInsert2, isAdmin)
     .then((response) => {
         res.status(201).json(response);
     })
@@ -136,11 +143,12 @@ exports.deleteComment = (req, res, next) => {
     
     let commentId = req.params.commentId;
     let userId = res.locals.userId;
+    let isAdmin = res.locals.isAdmin;
     let mysqlInsert1 = [commentId];
     let mysqlInsert2 = [commentId, userId];
     console.log()
 
-    postRepository.deleteComment(mysqlInsert1, mysqlInsert2)
+    postRepository.deleteComment(mysqlInsert1, mysqlInsert2, isAdmin)
     .then((response) => {
         res.status(200).json(response);
     })

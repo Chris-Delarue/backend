@@ -42,10 +42,9 @@ class PostRepository {
                     if(error) throw error;
                     resolve({ message :'Nouveau post crée !'});
                 });
-            
             });
     }
-    modifyPost(mysqlInsert1, mysqlInsert2) {
+    modifyPost(mysqlInsert1, mysqlInsert2, isAdmin) {
         let mySql1 = `
         SELECT * FROM post 
         WHERE postId=?`;
@@ -53,43 +52,48 @@ class PostRepository {
         return new Promise((resolve, reject) => {
             db.query(mySql1, (error, result, fields)=> {
                 if(error) throw error;
-                if(mysqlInsert2[3] == result[0].userId) {
+                if(true) {
                     let mySql2 = `
                     UPDATE post SET title = ?, content =? 
-                    WHERE postId =? AND userId =?`;
+                    WHERE postId =?  ${isAdmin === true ? '' : 'And userId=?'}`;
                     mySql2 = mysql.format(mySql2, mysqlInsert2);
                     db.query(mySql2, (error, result, fields) =>{
                         if(error) throw error;
-                        resolve({ message : 'Post modifié!'});
+                        resolve({ 
+                            message : 'Post modifié!'});
                     });
                 }else{
-                    reject({ error : 'opps pas modifié !!!'});
-
+                   
                 }
             });
         });
     }
     
-    deletePost(mysqlInsert1, mysqlInsert2) {
+    deletePost( mysqlInsert1,mysqlInsert2, isAdmin) {
+        
         let mySql1 = `
         SELECT * FROM post 
         WHERE postId = ?`;
         mySql1 = mysql.format(mySql1, mysqlInsert1);
         return new Promise((resolve, reject) => {
             db.query(mySql1, (error, result, fields) => {
+           
                 if(error) throw error ;
-                if(mysqlInsert2[1] == result[0].userId) {
-                    
-                    let mySql2 = `
-                    DELETE FROM post 
-                    WHERE postId =? AND userId =? ` ;
+                if(true)  {
+                    let mySql2 = `                     DELETE FROM post 
+                    WHERE postId =? 
+                     ${isAdmin === true ? '': 'AND userId=?'}` ;
                     mySql2 = mysql.format(mySql2, mysqlInsert2);
-                    db.query(mySql2, (error, result, fields)=> {
+                    
+                    db.query(mySql2, (error, result, fields)=> { 
+                   
                     if(error) throw error;
-                    resolve({ message: 'Post supprimé !!'});
+
+                    resolve({ 
+                        message: 'Post supprimé !!'});
                  }); 
-                }else{
-                    reject({error: 'Oppss post non supprimé !!'});
+                }else  {
+                    
                 }
             });
         });
@@ -123,7 +127,7 @@ class PostRepository {
             });
         });
     }
-    deleteComment(mysqlInsert1, mysqlInsert2) {
+    deleteComment(mysqlInsert1, mysqlInsert2, isAdmin) {
         let mySql1 = `
         SELECT * FROM comment 
         WHERE commentId = ?`;
@@ -131,17 +135,17 @@ class PostRepository {
         return new Promise((resolve, reject) => {
             db.query(mySql1, (error, result, fields) => {
                 if(error) throw error;
-                if(mysqlInsert2[1] == result[0].userId) {
+                if(true) {
                     let mySql2 = `
                     DELETE FROM comment 
-                    WHERE commentId = ? AND userId = ?`;
+                    WHERE commentId = ? ${isAdmin === true ? '': 'And userId=?'}`;
                     mySql2 = mysql.format(mySql2, mysqlInsert2);
                     
                         db.query(mySql2, mysqlInsert2);
                         if(error) throw error;
                         resolve({ message : 'commentaire supprimé'});
                 }else{
-                    reject({error : "oppsss"});
+                    
                 }
             });
         });
