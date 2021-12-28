@@ -25,11 +25,9 @@ exports.signup = (req, res, next) =>{
                
                 .then((response) => {
                     res.status(201).json(response);
-                    
                 })
                 .catch((error) => {
                     res.status(400).json(error);
-                
                 });
             })
             .catch((error) => res.status(500).json(error));
@@ -48,7 +46,6 @@ exports.login =  (req, res, next) => {
 
         .then((response) => {
             res.status(200).json(response);
-           console.log(response);
          })
         .catch((error) => {
             res.status(400).json(error);
@@ -63,10 +60,8 @@ exports.deleteAccount = (req, res, next) => {
     
     .then((response) => {
         res.status(200).json(response);
-        console.log(response);
     })
     .catch((error) => {
         res.status(400).json(error);
-        console.log(error);
     });
 };
