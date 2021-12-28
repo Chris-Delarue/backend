@@ -7,15 +7,12 @@ module.exports =  (req, res, next) => {
 
     try {
         const token = req.headers.authorization.split(' ')[1];
-        console.log(token);
         const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET); 
-        console.log(decodedToken);
         const userId = decodedToken.userId ;
-        console.log(userId);
         const isAdmin = decodedToken.isAdmin;
 
         let mysqlInsert = [userId];
-        console.log(mysqlInsert);
+        
         let mySql = `
         SELECT COUNT(userId) as count 
         FROM users 
@@ -27,7 +24,6 @@ module.exports =  (req, res, next) => {
             if (error) {
                 throw new Error({ error: 'oppps' });
             }
-            console.log(result[0]['count'] == 1);
             if (result[0]['count'] != 1) {
                
                 throw 'Le token n\'est pas valide';

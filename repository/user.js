@@ -20,7 +20,6 @@ class UserRepository {
             db.query(mySql, (error, result) => {
                 
                 if(error) {
-                    console.log(error)
                     reject({error : 'Une erreur est survenue !'});
                 }else{
                     resolve({ message: 'Bienvenue sur votre réseau!!'});
