@@ -13,7 +13,7 @@ exports.getAllPost = (req, res, next) => {
        
     }) 
     .catch((error) => {
-        res.status(400).json(error) ;   
+        res.status(500).json(error) ;   
     });
 };
 
@@ -31,12 +31,10 @@ exports.newPost = (req, res, next) => {
 
     postRepository.newPost(mysqlInsert)
     .then((response) => {
-        res.status(201).json(response);
-        
+        res.status(201).json(response); 
     })
     .catch((error) => {
-        res.status(400).json(error);
-        console.log('oulala!!'); 
+        res.status(500).json(error);
     });
 }
     
@@ -51,7 +49,7 @@ exports.getOnePost = (req, res, next) => {
        
     })
     .catch((error) => {
-        res.status(400).json(error);
+        res.status(500).json(error);
     });
 };
 
@@ -67,15 +65,13 @@ exports.deletePost = (req, res, next) =>{
 
         let imageurlNew = response[0].imageurl;
         if(imageurlNew != "") {
-            const image = imageurlNew.split('/images/')[1];
-                 console.log(image);
+            const image = imageurlNew.split('/images/')[1]; 
                 fs.unlink(`images/${image}`, ()=> {
-                   console.log('done');
                 });
         }
     })
     .catch((error) => {
-        res.status(400).json(error);
+        res.status(500).json(error);
     }); 
         
     let mysqlInsert1 = [postId];
@@ -86,7 +82,7 @@ exports.deletePost = (req, res, next) =>{
         res.status(200).json(response);
     })
     .catch((error) => {
-        res.status(400).json(error);
+        res.status(500).json(error);
     });
 };
     
@@ -130,11 +126,11 @@ exports.modifyPost = (req, res, next) => {
             res.status(201).json(response);
             })
             .catch((error) => {
-            res.status(400).json(error);
+            res.status(500).json(error);
             })
          })  
             .catch((error) => {
-            res.status(400).json(error);
+            res.status(500).json(error);
             })       
 };
 
@@ -150,7 +146,7 @@ exports.newComment = (req, res, next) => {
         res.status(201).json(response);
     })
     .catch((error) => {
-        res.status(400).json(error) ;   
+        res.status(500).json(error) ;   
     });
 };
 
@@ -163,7 +159,7 @@ exports.getComment = (req, res, next) => {
         res.status(200).json(response);
     })
     .catch((error) => {
-        res.status(400).json(error) ;   
+        res.status(500).json(error) ;   
     });
 };
 
@@ -180,7 +176,7 @@ exports.deleteComment = (req, res, next) => {
         res.status(200).json(response);
     })
     .catch((error) => {
-        res.status(400).json(error) ;   
+        res.status(500).json(error) ;   
     });
 };
 

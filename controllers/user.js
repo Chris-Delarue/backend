@@ -27,13 +27,11 @@ exports.signup = (req, res, next) =>{
                     res.status(201).json(response);
                 })
                 .catch((error) => {
-                    res.status(400).json(error);
+                    res.status(500).json(error);
                 });
             })
             .catch((error) => res.status(500).json(error));
-        }
-        
-        
+        } 
 };
 
 exports.login =  (req, res, next) => {
@@ -48,7 +46,7 @@ exports.login =  (req, res, next) => {
             res.status(200).json(response);
          })
         .catch((error) => {
-            res.status(400).json(error);
+            res.status(500).json(error);
         });
 };
 
@@ -62,6 +60,6 @@ exports.deleteAccount = (req, res, next) => {
         res.status(200).json(response);
     })
     .catch((error) => {
-        res.status(400).json(error);
+        res.status(500).json(error);
     });
 };
