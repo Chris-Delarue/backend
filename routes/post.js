@@ -1,14 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const userCtrl = require('../controllers/post');
+const postCtrl = require('../controllers/post');
+const multer = require('../middleware/multer-config');
 
-router.get('/',auth,   userCtrl.getAllPost);
-router.post('/', auth, userCtrl.newPost);
-router.get('/:userId', auth,userCtrl.getOnePost);
-router.delete('/:userId', auth,  userCtrl.deleteOnePost);
-//router.put('/:userId',  auth,userCtrl.modifyOnePost);
-//router.get('/user:userId/post', auth, userCtrl.getUserPost);
+try{
 
+router.get('/',                         auth,           postCtrl.getAllPost);
+router.post('/',                        auth,   multer, postCtrl.newPost);
+router.get('/:postId',                  auth,   multer, postCtrl.getOnePost);
+router.delete('/:postId',               auth,           postCtrl.deletePost);
+router.put('/:postId',                  auth,   multer, postCtrl.modifyPost);
+
+router.get('/:postId/comment',          auth,   postCtrl.getComment);
+router.post('/:postId/comment',         auth,   postCtrl.newComment);
+router.delete('/comment/:commentId',    auth,   postCtrl.deleteComment);
+
+} catch(error) {
+    console.log(error);
+}
 
 module.exports = router;
