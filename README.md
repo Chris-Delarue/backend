@@ -32,7 +32,7 @@ __________________________________________
 	
 			/backend/groupomania.sql
 	
-	* créer un dossier .env dans le backend root, copier coller les informations suivantes avec vos informations!! :
+	* créer un dossier .env dans le backend root, copier coller les informations suivantes avec vos informations dans les guillemets vides!! :
 	
 			TOKEN_SECRET="" ( token pour le login)
 			SECRET_PHRASE="" ( crypto.js pour l'émail)
