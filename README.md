@@ -38,7 +38,7 @@ __________________________________________
 			SECRET_PHRASE=""
 			DB_HOST="localhost"
 			DB_USER=""
-			DB_PASSWORD="*"
+			DB_PASSWORD=""
 			DB_DATABASE=""
 			DB_PORT="3306"
 		
