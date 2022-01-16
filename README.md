@@ -14,6 +14,6 @@ INSTRUCTIONS
 __________________________________________
 
 * Cloner ce repositary Github git clone
-      * https://github.com/Chris-Delarue/backend.git
+	* https://github.com/Chris-Delarue/backend.git
 
 
