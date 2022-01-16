@@ -45,6 +45,17 @@ __________________________________________
 * Pour créer un administrateur :
 
 	* Allez sur la base de donnée et manuelle ajouter le chiffre 1 dans la colonne IsAdmin et cliquez sur Apply.
+
+* Pour démarer le back :
+			
+			npm install
+	* ensuite :
+			
+			nodemon server
+
+* Bien vérifier que vous êtes connecté à la base de donnée.
+			
+			
 		
 
 
