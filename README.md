@@ -41,6 +41,10 @@ __________________________________________
 			DB_PASSWORD=""
 			DB_DATABASE=""
 			DB_PORT="3306"
+
+* Pour créer un administrateur :
+
+	* Allez sur la base de donnée et manuelle ajouter le chiffre 1 dans la colonne IsAdmin et cliquez sur Apply.
 		
 
 
