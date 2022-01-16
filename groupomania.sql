@@ -86,12 +86,13 @@ CREATE TABLE `post` (
   `postId` int NOT NULL AUTO_INCREMENT,
   `userId` int NOT NULL,
   `title` varchar(45) NOT NULL,
-  `content` text(500) NOT NULL,
+  `content` text NOT NULL,
+  `imageurl` varchar(96) DEFAULT NULL,
   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`postId`),
   KEY `userId_idx` (`userId`),
   CONSTRAINT `userId` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=459 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,7 +113,8 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-23 13:55:25
+-- Dump completed on 2022-01-16 12:51:58
+
 
 -- MySQL dump 10.13  Distrib 8.0.25, for Win64 (x86_64)
 --
