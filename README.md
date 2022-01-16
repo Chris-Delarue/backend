@@ -31,6 +31,16 @@ __________________________________________
 	* ensuite impoter la base de donnée :
 	
 			/backend/groupomania.sql
+	
+	* créer un dossier .env dans le backend root, copier coller les informations suivantes avec vos informations!! :
+	
+		*TOKEN_SECRET=""
+		*SECRET_PHRASE=""
+		*DB_HOST="localhost"
+		*DB_USER=""
+		*DB_PASSWORD="*"
+		*DB_DATABASE=""
+		*DB_PORT="3306"
 		
 
 
