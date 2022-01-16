@@ -57,7 +57,7 @@ __________________________________________
 			
 		* pour la production :
 		
-			node server.js pour la production
+			node server.js 
 
 * Bien vérifier que vous êtes connecté à la base de donnée.
 			
