@@ -34,10 +34,10 @@ __________________________________________
 	
 	* créer un dossier .env dans le backend root, copier coller les informations suivantes avec vos informations!! :
 	
-			TOKEN_SECRET=""
-			SECRET_PHRASE=""
+			TOKEN_SECRET="" ( token pour le login)
+			SECRET_PHRASE="" ( crypto.js pour l'émail)
 			DB_HOST="localhost"
-			DB_USER=""
+			DB_USER="groupomania"
 			DB_PASSWORD=""
 			DB_DATABASE=""
 			DB_PORT="3306"
