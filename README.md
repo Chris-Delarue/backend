@@ -30,7 +30,7 @@ __________________________________________
 	* démarer votre Mysql server
 	* ensuite impoter la base de donnée :
 	
-		/backend/groupomania.sql
+			/backend/groupomania.sql
 		
 
 
