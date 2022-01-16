@@ -25,6 +25,11 @@ __________________________________________
 
 * Cloner ce repositary Github git clone
 	* https://github.com/Chris-Delarue/backend.git
-	* 
+
+* Database :
+	* démarer votre Mysql server
+	* ensuite impoter la base de donnée :
+			/backend/groupomania/sql
+		
 
 
