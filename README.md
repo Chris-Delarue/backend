@@ -50,8 +50,14 @@ __________________________________________
 			
 			npm install
 	* ensuite :
+	
+		* pour le developpement :
 			
-			nodemon server
+			nodemon server 
+			
+		* pour la production :
+		
+			node server.js pour la production
 
 * Bien vérifier que vous êtes connecté à la base de donnée.
 			
