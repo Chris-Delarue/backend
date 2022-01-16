@@ -53,11 +53,11 @@ __________________________________________
 	
 		* pour le developpement :
 			
-			nodemon server 
+				nodemon server 
 			
 		* pour la production :
 		
-			node server.js 
+				node server.js 
 
 * Bien vérifier que vous êtes connecté à la base de donnée.
 			
